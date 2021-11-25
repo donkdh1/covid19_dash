@@ -21,7 +21,7 @@ from plotly.subplots import make_subplots
 
 
 # route folder setting (your labtop's folder)
-path = 'C:/Users/Kim/Desktop/covid19_dash/data/'
+path = 'data/'
 
 
 # ## Data
