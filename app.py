@@ -1,13 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Trends in Number of COVID-19 and Vaccine - Visualization
+# Trends in Number of COVID-19 and Vaccine - Visualization
 
-# ## Call package
-
-# In[1]:
-
-
+### Call package
 import pandas as pd
 import numpy as np
 import datetime
@@ -16,40 +12,22 @@ import datetime
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-
-# In[2]:
-
-
-# route folder setting (your labtop's folder)
+# route folder setting (your laptop's folder)
 path = 'data/'
 
-
-# ## Data
-
-# In[3]:
-
-
+### Data
 df = pd.read_csv(path + 'covid_vaccine.csv')
 df.head()
 
-
-# # Dashboard
-
-# In[4]:
-
-
+# Dashboard
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
-# # file upload
+### file upload
 # import io       # I/O(input/output)
 # import base64   # decoding
-
-
-# In[5]:
-
 
 # button setting
 button = ['confirmed', 'deaths']
@@ -78,10 +56,6 @@ app.layout = html.Div([
             , style={'width': '95%', 'margin-left': 'auto', 'margin-right': 0})
 ])
 
-
-# In[6]:
-
-
 @app.callback(Output('graph', 'figure'), 
               [Input('id_state', 'value'),
                Input('id_covid', 'value')])
@@ -89,11 +63,11 @@ app.layout = html.Div([
 # Define by input order = (1) state, (2) covid
 def update_graph(stat, cov):
     
-    ### secondary y-axis setting,
+    # secondary y-axis setting,
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     
-    ### text - legend name & yaxis label
+    # text - legend name & yaxis label
     if cov == 'confirmed':
         legend = 'Confirmed'
         ytitle = '<b>Number of Confirmed Cases</b>'
@@ -102,10 +76,10 @@ def update_graph(stat, cov):
         ytitle = '<b>Number of Deaths Cases</b>'
     
     
-    ### Selecting the data
+    # Selecting the data
     df1 = df[df['state'] == stat]
     
-    ### primary Y : Covid-19
+    # primary Y : Covid-19
     fig.add_trace(go.Bar(x = df1['date'],
                          y = df1[cov],
                          name = legend,
@@ -120,20 +94,20 @@ def update_graph(stat, cov):
                                 plot_bgcolor='white'))
     
     
-    ### secondary Y : Fully Vaccine %
+    # secondary Y : Fully Vaccine %
     fig.add_trace(go.Scatter(x = df1['date'],
                              y = df1['fully']/df1['population']*100,
                              name = 'Fully',
-                             hovertemplate='%{y:,.1f}%',   # 소수점 1자리
+                             hovertemplate='%{y:,.1f}%',   # one decimal place
                              mode="lines",
                              line={'width':2.5}),
                   secondary_y=True)
     
-    ### secondary Y : At least one Vaccine %
+    # secondary Y : At least one Vaccine %
     fig.add_trace(go.Scatter(x = df1['date'],
                              y = df1['at_least_one']/df1['population']*100,
                              name = 'At least 1',
-                             hovertemplate='%{y:,.1f}%',   # 소수점 1자리
+                             hovertemplate='%{y:,.1f}%',   # one decimal place
                              mode="lines",
                              line={'width':2.5}),
                   secondary_y=True)
@@ -143,20 +117,9 @@ def update_graph(stat, cov):
                      ticksuffix = '%', 
                      range = [0, 100],
                      secondary_y=True)
-    
+
     return fig
-
-
-# In[ ]:
-
 
 # Run App
 if __name__=='__main__':
     app.run_server(debug=False)
-
-
-# In[ ]:
-
-
-
-
